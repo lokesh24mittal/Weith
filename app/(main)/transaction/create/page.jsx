@@ -2,15 +2,32 @@ import { getUserAccounts } from "@/actions/dashboard";
 import React from "react";
 import TransactionForm from "../_components/transaction-form";
 import { defaultCategories } from "@/data/categories";
+import { getTransaction } from "@/actions/transaction";
 
-const AddTransactionPage = async() => {
+const AddTransactionPage = async ({ searchParams }) => {
+  const accounts = await getUserAccounts();
+  const params = await searchParams;
+  const editId = params?.edit;
 
-    const accounts=await getUserAccounts();
-  return <div className="max-w-3xl mx-auto px-5">
-    <h1 className="text-5xl gradient-title mb-8">Add Transactions</h1>
-    <TransactionForm accounts={accounts} categories={defaultCategories}/>
+  let initialData = null;
+  if (editId) {
+    const transaction = await getTransaction(editId);
+    initialData = transaction;
+  }
 
-  </div>;
+  return (
+    <div className="max-w-3xl mx-auto px-5">
+      <h1 className="text-5xl gradient-title mb-8">
+        {editId ? "Update Transaction" : "Create Transaction"}
+      </h1>
+      <TransactionForm
+        accounts={accounts}
+        categories={defaultCategories}
+        editMode={!!editId}
+        initialData={initialData}
+      />
+    </div>
+  );
 };
 
 export default AddTransactionPage;

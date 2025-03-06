@@ -423,7 +423,7 @@ const TransactionsTable = ({ transactions }) => {
                           <DropdownMenuLabel
                             onClick={() =>
                               router.push(
-                                `transaction/create?edit=${transaction.id}`
+                                `/transaction/create?edit=${transaction.id}`
                               )
                             }
                             className={
