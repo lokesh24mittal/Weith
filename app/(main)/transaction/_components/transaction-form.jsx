@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { ReceiptScanner } from "./recipt-scanner";
 
 const TransactionForm = ({ accounts, categories }) => {
   const {
@@ -84,8 +85,31 @@ const TransactionForm = ({ accounts, categories }) => {
 
   const router = useRouter();
 
+  const handleScanComplete = async (scannedData) => {
+    if (scannedData) {
+      if (scannedData.amount) {
+        setValue("amount", scannedData.amount.toString());
+      }
+      if (scannedData.date) {
+        setValue("date", new Date(scannedData.date));
+      }
+      if (scannedData.description) {
+        setValue("description", scannedData.description);
+      }
+      if (scannedData.category) {
+        console.log("scanned cat");
+        setValue("category", scannedData.category);
+      }
+
+      toast.success("Receipt scanned successfully");
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
+      {/* ai recipt scanner */}
+
+      <ReceiptScanner onScanComplete={handleScanComplete} />
       {/* Type */}
 
       <div className="space-y-2">
